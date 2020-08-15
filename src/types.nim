@@ -1,8 +1,12 @@
 ## Types
-import lastfm
+import lastfm, listenbrainz
 
 type 
-  User* = object
-    username: string
-    lfmSession: LastFMSession
-    lbAuthToken: string
+  User* = ref object
+    username*: string
+    lfmSession*: LastFMSession
+    lb*: ListenBrainz
+
+proc newUser*(username: string, lbToken: string): User =
+  return User(username: username,
+              lb: newListenBrainz(lbToken))
