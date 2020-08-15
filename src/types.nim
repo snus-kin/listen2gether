@@ -6,6 +6,13 @@ type
     username*: string
     lfmSession*: LastFMSession
     lb*: ListenBrainz
+  
+
+  Track* = ref object
+    name: string
+    artist: string
+    album: string
+
 
 proc newUser*(username: string, lbToken: string): User =
   return User(username: username,
