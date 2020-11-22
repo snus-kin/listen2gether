@@ -4,8 +4,8 @@ import lastfm, listenbrainz
 type 
   User* = ref object
     username*: string
-    lfmSession*: LastFMSession
-    lb*: ListenBrainz
+    lfm*: AsyncLastFM | SyncLastFM
+    lb*: AsyncListenBrainz | SyncListenBrainz
   
 
   Track* = ref object
@@ -14,6 +14,12 @@ type
     album: string
 
 
-proc newUser*(username: string, lbToken: string): User =
+# new last.fm user
+proc newUser*(username, apiKey, apiSecret: string): User =
   return User(username: username,
-              lb: newListenBrainz(lbToken))
+              lfm: newAsyncLastFM(apiKey, apiSecret))
+
+# new listenbrainz user
+proc newUser*(username, lbToken: string): User =
+  return User(username: username,
+              lb: newAsyncListenBrainz(lbToken))
