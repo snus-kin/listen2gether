@@ -1,25 +1,29 @@
 ## Types
-import lastfm, listenbrainz
 
-type 
+type
   User* = ref object
-    username*: string
-    lfm*: AsyncLastFM | SyncLastFM
-    lb*: AsyncListenBrainz | SyncListenBrainz
-  
+    username*, lfmSessionKey*, lbToken*: string
 
   Track* = ref object
-    name: string
-    artist: string
-    album: string
+    track_name*, artist_name*, release_name* : string
+    track_mbid*, artist_mbid*, release_mbid*: string
+
+proc newUser*(username: string,
+  lfmSessionKey, lbToken: string = ""): User =
+  ## new user
+  new(result)
+  result.username = username
+  result.lfmSessionKey = lfmSessionKey
+  result.lbToken = lbToken
 
 
-# new last.fm user
-proc newUser*(username, apiKey, apiSecret: string): User =
-  return User(username: username,
-              lfm: newAsyncLastFM(apiKey, apiSecret))
-
-# new listenbrainz user
-proc newUser*(username, lbToken: string): User =
-  return User(username: username,
-              lb: newAsyncListenBrainz(lbToken))
+proc newTrack*(track_name, artist_name: string,
+  release_name, track_mbid, artist_mbid, release_mbid: string = ""): Track =
+  ## new track
+  new(result)
+  result.track_name = track_name
+  result.artist_name = artist_name
+  result.release_name = release_name
+  result.track_mbid = track_mbid
+  result.artist_mbid = artist_mbid
+  result.release_mbid = release_mbid

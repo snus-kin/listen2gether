@@ -1,20 +1,32 @@
 ## Main process
 import os, json
-import types, scrobbling
 import listenbrainz
+import listenbrainz/[core]
+import types, scrobbling, utils
+
+let
+  lfmKeyFile = readFile("keys.json").parseJson
+  lfmApiKey = lfmKeyFile["apiKey"].getStr
+  lfmApiSecret = lfmKeyFile["secret"].getStr
+
 
 # temporarily set mirrored lb user to be 'snufkin' for debug, this will be set
 # by the user
-let mirroredUser = "snufkin"
+let
+  mirroringUser = "tandy1000"
+  mirroredUser = "snufkin"
+
 
 when isMainModule:
   echo mirroredUser
-  let user = newUser("testuser", getEnv("lbToken"))
-  if user.lb.validateToken["code"].getInt != 200:
+  let
+    user = newUser(mirroringUser, lbToken=getEnv("lbToken"))
+    lb = newSyncListenBrainz(user.lbToken)
+
+  if lb.validateToken(user.lbToken)["code"].getInt != 200:
     raise newException(ValueError, "ERROR: Invalid token (or perhaps you are rate limited)")
   
-  let toMirror = user.lb.getUsersRecentListens(@[mirroredUser])["payload"]["listens"][0]
-  # then make this a Track object
+  let track = getCurrentTrack(lb, user)
+  
   # then put into scrobbling module to scrobble
-  #   this will make it into the lfm/lb payload format then it can be sent w/ the respective api
-  echo pretty toMirror
+  # this will make it into the lfm/lb payload format then it can be sent w/ the respective api
