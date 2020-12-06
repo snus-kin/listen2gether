@@ -3,7 +3,10 @@ import listenbrainz
 import listenbrainz/[core]
 import types
 
-proc newListen(track: Track, timestamp: string): JsonNode =
+
+proc newListen(
+  track: Track,
+  timestamp: string): JsonNode =
   result = %*
     {
       "listen_type": "single",
@@ -29,13 +32,13 @@ proc newListen(track: Track, timestamp: string): JsonNode =
   if track.release_mbid != "":
     result["payload"]["track_metadata"]["additional_info"] = %* {"release_mbid": track.release_mbid}
 
+
 proc listenTrack*(
   lb: SyncListenBrainz | AsyncListenBrainz,
   user: User,
   track: Track,
   timestamp = $getTime().toUnix()): Future[JsonNode] {.multisync.} =
   result = await lb.submitListens(newListen(track, timestamp))
-
 
 
 #[
@@ -53,7 +56,7 @@ lastfm xml
 ]#
 
 
-#proc newScrobblePayload(scrobble: Scrobble): string =
+#proc newScrobble(scrobble: Scrobble): string =
 
 
 #proc scrobbleTrack*(fm: SyncLastFM | AsyncLastFM)
