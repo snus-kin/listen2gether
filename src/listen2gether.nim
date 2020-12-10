@@ -1,24 +1,26 @@
-## Main process
-import asyncdispatch, os, json
+import os
 import listenbrainz
-import listenbrainz/[core]
-import types, scrobbling, utils
+import models, types, utils
 
+#[
 let
-  lfmKeyFile = readFile("keys.json").parseJson
-  lfmApiKey = lfmKeyFile["apiKey"].getStr
-  lfmApiSecret = lfmKeyFile["secret"].getStr
-
+  lfm_keys = readFile("keys.json").parseJson
+  lfm_key = lfm_keys["apiKey"].getStr
+  lfm_secret = lfm_keys["secret"].getStr
+]#
 
 # temporarily set mirrored lb user to be 'tandy1000' for debug, this will be set
 # by the user
 when isMainModule:
+  let db = openDbConn()
+  db.insertTables()
   let
-    clientUser = newUser("tandy1000", lbToken=getEnv("lbToken"))
-    mirroredUser = newUser("test")
-    lb = newSyncListenBrainz(clientUser.lbToken)
-  lb.validateLbToken(clientUser.lbToken)
-  let track = lb.getCurrentTrack(mirroredUser)
-  let submission = lb.listenTrack(clientUser, track)
-  # then put into scrobbling module to scrobble
-  # this will make it into the lfm/lb payload format then it can be sent w/ the respective api
+    client_user = newUser("test", lb_token=getEnv("lbToken"))
+    mirrored_user = newUser("tandy1000")
+    lb = newSyncListenBrainz(clientUser.lb_token)
+  lb.validateLbToken(clientUser.lb_token)
+  let
+    listen = lb.getCurrentTrack(mirroredUser)
+    submission = lb.listenTrack(listen)
+  db.insertListen(listen)
+  db.closeDbConn()
