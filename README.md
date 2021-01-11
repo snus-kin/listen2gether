@@ -1,18 +1,20 @@
-# listen2gether
-## sync your listens on last.fm and listenbrainz with other people
+## Listen2gether
+### sync your listens on Last.FM and [ListenBrainz](listenbrainz.org) with other people
 
+![Current state of the Figma UI](docs/UIdraft.png)
 
-#### TODO:
-  - Finish work on the listenbrainz-nim API
-    - finish tests
-    - edit nim doc
-    - put it in nimble
-  - Create basic functionality for scrobble mirroring
-    - implement Last.fm functionality
-  - Setup NORM for database 
-  - Setup prologue
-    - create home view (static)
-    - create mirror view (generated)
-  - Integrate Figma UI
-    - complete Figma UI
-    - export using fidget plugin
+### TODO:
+- [ ] Finish work on the listenbrainz-nim API
+  - [ ] Finish tests
+  - [ ] Edit nim doc
+  - [ ] Upload to Nimble
+- [ ] Create basic functionality for scrobble mirroring
+  - [x] Implement for ListenBrainz
+  - [ ] Implement for Last.fm
+- [ ] Setup NORM for database 
+- [ ] Setup Prologue
+  - [ ] Create home view (static)
+  - [ ] Create mirror view (generated)
+- [ ] Integrate Figma UI
+  - [ ] Complete Figma UI
+  - [ ] Export using Fidget plugin
