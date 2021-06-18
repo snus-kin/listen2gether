@@ -4,10 +4,7 @@
 ![Current state of the Figma UI](docs/UIdraft.png)
 
 ### TODO:
-- [ ] Finish work on the listenbrainz-nim API
-  - [ ] Finish tests
-  - [ ] Edit nim doc
-  - [ ] Upload to Nimble
+- [x] Finish work on the listenbrainz-nim API
 - [ ] Create basic functionality for scrobble mirroring
   - [x] Implement for ListenBrainz
   - [ ] Implement for Last.fm

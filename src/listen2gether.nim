@@ -15,10 +15,10 @@ when isMainModule:
   let db = openDbConn()
   db.insertTables()
   let
-    client_user = newUser("test", lb_token=getEnv("lbToken"))
+    client_user = newUser("test", lbToken=getEnv("lbToken"))
     mirrored_user = newUser("tandy1000")
-    lb = newSyncListenBrainz(clientUser.lb_token)
-  lb.validateLbToken(clientUser.lb_token)
+    lb = newSyncListenBrainz(clientUser.lbToken)
+  lb.validateLbToken(clientUser.lbToken)
   let
     listen = lb.getCurrentTrack(mirroredUser)
     submission = lb.listenTrack(listen)

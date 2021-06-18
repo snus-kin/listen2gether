@@ -15,37 +15,37 @@ proc jsonToListen*(payload: JsonNode): Listen =
   ## Convert a listen JSON payload to a Listen object
   let
     listened_at = payload["listened_at"].getInt
-    track_name = payload["track_metadata"]["track_name"].getStr
-    artist_name = payload["track_metadata"]["artist_name"].getStr
-  result = newListen(listened_at, newTrack(track_name, artist_name))
-  if checkKey(payload["track_metadata"], "release_name"):
-    result.track.release_name = payload["track_metadata"]["release_name"].getStr
-  if checkKey(payload["track_metadata"]["additional_info"], "tracknumber"):
-    result.track.tracknumber = payload["track_metadata"]["additional_info"]["tracknumber"].getStr
-  if checkKey(payload["track_metadata"]["additional_info"], "track_mbid"):
-    result.track.track_mbid = payload["track_metadata"]["additional_info"]["track_mbid"].getStr
-  if checkKey(payload["track_metadata"]["additional_info"], "recording_mbid"):
-    result.track.recording_mbid = payload["track_metadata"]["additional_info"]["recording_mbid"].getStr
-  if checkKey(payload["track_metadata"]["additional_info"], "release_mbid"):
-    result.track.release_mbid = payload["track_metadata"]["additional_info"]["release_mbid"].getStr
-  if checkKey(payload["track_metadata"]["additional_info"], "release_group_mbid"):
-    result.track.release_group_mbid = payload["track_metadata"]["additional_info"]["release_group_mbid"].getStr
-  if checkKey(payload["track_metadata"]["additional_info"], "artist_msid"):
-    result.track.artist_msid = payload["track_metadata"]["additional_info"]["artist_msid"].getStr
-  if checkKey(payload, "recording_msid"):
-    result.track.recording_msid = payload["recording_msid"].getStr
-  if checkKey(payload["track_metadata"]["additional_info"], "release_msid"):
-    result.track.release_msid = payload["track_metadata"]["additional_info"]["release_msid"].getStr
+    trackName = payload["track_metadata"]["trackName"].getStr
+    artistName = payload["track_metadata"]["artistName"].getStr
+  result = newListen(listened_at, newTrack(trackName, artistName))
+  if checkKey(payload["track_metadata"], "releaseName"):
+    result.track.releaseName = payload["track_metadata"]["releaseName"].getStr
+  if checkKey(payload["track_metadata"]["additional_info"], "trackNumber"):
+    result.track.trackNumber = payload["track_metadata"]["additional_info"]["trackNumber"].getStr
+  if checkKey(payload["track_metadata"]["additional_info"], "trackMBID"):
+    result.track.trackMBID = payload["track_metadata"]["additional_info"]["trackMBID"].getStr
+  if checkKey(payload["track_metadata"]["additional_info"], "recordingMBID"):
+    result.track.recordingMBID = payload["track_metadata"]["additional_info"]["recordingMBID"].getStr
+  if checkKey(payload["track_metadata"]["additional_info"], "releaseMBID"):
+    result.track.releaseMBID = payload["track_metadata"]["additional_info"]["releaseMBID"].getStr
+  if checkKey(payload["track_metadata"]["additional_info"], "releaseGroupMBID"):
+    result.track.releaseGroupMBID = payload["track_metadata"]["additional_info"]["releaseGroupMBID"].getStr
+  if checkKey(payload["track_metadata"]["additional_info"], "artistMSID"):
+    result.track.artistMSID = payload["track_metadata"]["additional_info"]["artistMSID"].getStr
+  if checkKey(payload, "recordingMSID"):
+    result.track.recordingMSID = payload["recordingMSID"].getStr
+  if checkKey(payload["track_metadata"]["additional_info"], "releaseMSID"):
+    result.track.releaseMSID = payload["track_metadata"]["additional_info"]["releaseMSID"].getStr
   if checkKey(payload["track_metadata"]["additional_info"], "isrc"):
     result.track.isrc = payload["track_metadata"]["additional_info"]["isrc"].getStr
-  if checkKey(payload["track_metadata"]["additional_info"], "spotify_id"):
-    result.track.spotify_id = payload["track_metadata"]["additional_info"]["spotify_id"].getStr
+  if checkKey(payload["track_metadata"]["additional_info"], "spotifyID"):
+    result.track.spotifyID = payload["track_metadata"]["additional_info"]["spotifyID"].getStr
   if checkKey(payload["track_metadata"]["additional_info"], "tags"):
     result.track.tags = payload["track_metadata"]["additional_info"]["tags"].to(seq[string])
-  if checkKey(payload["track_metadata"]["additional_info"], "artist_mbids"):
-    result.track.artist_mbids = payload["track_metadata"]["additional_info"]["artist_mbids"].to(seq[string])
-  if checkKey(payload["track_metadata"]["additional_info"],"word_mbids"):
-    result.track.word_mbids = payload["track_metadata"]["additional_info"]["word_mbids"].to(seq[string])
+  if checkKey(payload["track_metadata"]["additional_info"], "artistMBIDs"):
+    result.track.artistMBIDs = payload["track_metadata"]["additional_info"]["artistMBIDs"].to(seq[string])
+  if checkKey(payload["track_metadata"]["additional_info"],"wordMBIDs"):
+    result.track.wordMBIDs = payload["track_metadata"]["additional_info"]["wordMBIDs"].to(seq[string])
 
 
 proc listenToJson*(listen: Listen): JsonNode =
@@ -60,42 +60,42 @@ proc listenToJson*(listen: Listen): JsonNode =
             "additional_info": {
               "listening_from": listen.listening_from
             },
-            "artist_name": listen.track.artist_name,
-            "track_name": listen.track.track_name
+            "artistName": listen.track.artistName,
+            "trackName": listen.track.trackName
           }
         }
       ]
     }
   if listen.playing_now:
     result["payload"][0].add("playing_now", %* listen.playing_now)
-  if not listen.track.release_name.isEmptyOrWhitespace():
-    result["payload"][0]["track_metadata"].add("release_name", %* listen.track.release_name)
-  if not listen.track.tracknumber.isEmptyOrWhitespace():
-    result["payload"][0]["track_metadata"]["additional_info"].add("tracknumber", %* listen.track.tracknumber.parseInt())
-  if not listen.track.track_mbid.isEmptyOrWhitespace():
-    result["payload"][0]["track_metadata"]["additional_info"].add("track_mbid", %* listen.track.track_mbid)
-  if not listen.track.recording_mbid.isEmptyOrWhitespace():
-    result["payload"][0]["track_metadata"]["additional_info"].add("recording_mbid", %* listen.track.recording_mbid)
-  if not listen.track.release_mbid.isEmptyOrWhitespace():
-    result["payload"][0]["track_metadata"]["additional_info"].add("release_mbid", %* listen.track.release_mbid)
-  if not listen.track.release_group_mbid.isEmptyOrWhitespace():
-    result["payload"][0]["track_metadata"]["additional_info"].add("release_group_mbid", %* listen.track.release_group_mbid)
-  if not listen.track.artist_msid.isEmptyOrWhitespace():
-    result["payload"][0]["track_metadata"]["additional_info"].add("artist_msid", %* listen.track.artist_msid)
-  if not listen.track.recording_msid.isEmptyOrWhitespace():
-    result["payload"][0].add("recording_msid", %* listen.track.recording_msid)
-  if not listen.track.release_msid.isEmptyOrWhitespace():
-    result["payload"][0]["track_metadata"]["additional_info"].add("release_msid", %* listen.track.release_msid)
+  if not listen.track.releaseName.isEmptyOrWhitespace():
+    result["payload"][0]["track_metadata"].add("releaseName", %* listen.track.releaseName)
+  if not listen.track.trackNumber.isEmptyOrWhitespace():
+    result["payload"][0]["track_metadata"]["additional_info"].add("trackNumber", %* listen.track.trackNumber.parseInt())
+  if not listen.track.trackMBID.isEmptyOrWhitespace():
+    result["payload"][0]["track_metadata"]["additional_info"].add("trackMBID", %* listen.track.trackMBID)
+  if not listen.track.recordingMBID.isEmptyOrWhitespace():
+    result["payload"][0]["track_metadata"]["additional_info"].add("recordingMBID", %* listen.track.recordingMBID)
+  if not listen.track.releaseMBID.isEmptyOrWhitespace():
+    result["payload"][0]["track_metadata"]["additional_info"].add("releaseMBID", %* listen.track.releaseMBID)
+  if not listen.track.releaseGroupMBID.isEmptyOrWhitespace():
+    result["payload"][0]["track_metadata"]["additional_info"].add("releaseGroupMBID", %* listen.track.releaseGroupMBID)
+  if not listen.track.artistMSID.isEmptyOrWhitespace():
+    result["payload"][0]["track_metadata"]["additional_info"].add("artistMSID", %* listen.track.artistMSID)
+  if not listen.track.recordingMSID.isEmptyOrWhitespace():
+    result["payload"][0].add("recordingMSID", %* listen.track.recordingMSID)
+  if not listen.track.releaseMSID.isEmptyOrWhitespace():
+    result["payload"][0]["track_metadata"]["additional_info"].add("releaseMSID", %* listen.track.releaseMSID)
   if not listen.track.isrc.isEmptyOrWhitespace():
     result["payload"][0]["track_metadata"]["additional_info"].add("isrc", %* listen.track.isrc)
-  if not listen.track.spotify_id.isEmptyOrWhitespace():
-    result["payload"][0]["track_metadata"]["additional_info"].add("spotify_id", %* listen.track.spotify_id)
+  if not listen.track.spotifyID.isEmptyOrWhitespace():
+    result["payload"][0]["track_metadata"]["additional_info"].add("spotifyID", %* listen.track.spotifyID)
   if listen.track.tags != @[""]:
     result["payload"][0]["track_metadata"]["additional_info"].add("tags", %* listen.track.tags)
-  if listen.track.artist_mbids != @[""]:
-    result["payload"][0]["track_metadata"]["additional_info"].add("artist_mbids", %* listen.track.artist_mbids)
-  if listen.track.word_mbids != @[""]:
-    result["payload"][0]["track_metadata"]["additional_info"].add("word_mbids", %* listen.track.word_mbids)
+  if listen.track.artistMBIDs != @[""]:
+    result["payload"][0]["track_metadata"]["additional_info"].add("artistMBIDs", %* listen.track.artistMBIDs)
+  if listen.track.wordMBIDs != @[""]:
+    result["payload"][0]["track_metadata"]["additional_info"].add("wordMBIDs", %* listen.track.wordMBIDs)
 
 
 proc getCurrentTrack*(
