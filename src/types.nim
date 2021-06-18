@@ -23,7 +23,7 @@ func newUser*(username: string,
   result.lfmSessionKey = lfmSessionKey
   result.lbToken = lbToken
 
-func newListen*(listened_at: int64,
+func newListen*(listenedAt: int64,
   track: Track,
   playingNow: bool = false,
   listenType: string = "single",

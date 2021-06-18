@@ -14,10 +14,10 @@ proc checkKey(source: JsonNode,
 proc jsonToListen*(payload: JsonNode): Listen =
   ## Convert a listen JSON payload to a Listen object
   let
-    listened_at = payload["listened_at"].getInt
+    listenedAt = payload["listenedAt"].getInt
     trackName = payload["track_metadata"]["trackName"].getStr
     artistName = payload["track_metadata"]["artistName"].getStr
-  result = newListen(listened_at, newTrack(trackName, artistName))
+  result = newListen(listenedAt, newTrack(trackName, artistName))
   if checkKey(payload["track_metadata"], "releaseName"):
     result.track.releaseName = payload["track_metadata"]["releaseName"].getStr
   if checkKey(payload["track_metadata"]["additional_info"], "trackNumber"):
@@ -52,13 +52,13 @@ proc listenToJson*(listen: Listen): JsonNode =
   ## Generate ListenBrainz listen payload given a Listen object
   result = %*
     {
-      "listen_type": listen.listen_type,
+      "listen_type": listen.listenType,
       "payload": [
         {
-          "listened_at": $listen.listened_at,
+          "listenedAt": $listen.listenedAt,
           "track_metadata": {
             "additional_info": {
-              "listening_from": listen.listening_from
+              "listening_from": listen.listeningFrom
             },
             "artistName": listen.track.artistName,
             "trackName": listen.track.trackName
@@ -66,8 +66,8 @@ proc listenToJson*(listen: Listen): JsonNode =
         }
       ]
     }
-  if listen.playing_now:
-    result["payload"][0].add("playing_now", %* listen.playing_now)
+  if listen.playingNow:
+    result["payload"][0].add("playing_now", %* listen.playingNow)
   if not listen.track.releaseName.isEmptyOrWhitespace():
     result["payload"][0]["track_metadata"].add("releaseName", %* listen.track.releaseName)
   if not listen.track.trackNumber.isEmptyOrWhitespace():
@@ -117,10 +117,10 @@ proc listenTrack*(
 
 proc validateLbToken*(
   lb: SyncListenBrainz | AsyncListenBrainz,
-  lb_token: string) {.multisync.} =
+  lbToken: string) {.multisync.} =
   ## Validate a ListenBrainz token given a ListenBrainz object and token
-  if lb_token != "":
-    let result = await lb.validateToken(lb_token)
+  if lbToken != "":
+    let result = await lb.validateToken(lbToken)
     if result["code"].getInt != 200:
       raise newException(ValueError, "ERROR: Invalid token (or perhaps you are rate limited)")
   else:
