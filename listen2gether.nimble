@@ -15,4 +15,4 @@ requires "prologue"
 requires "nim >= 1.4.0"
 requires "listenbrainz"
 requires "norm"
-
+requires "jsony"
