@@ -20,7 +20,6 @@ requires "prologue"
 requires "nim >= 1.4.0"
 requires "listenbrainz"
 requires "norm"
-requires "prologue"
 
 #requires "https://gitlab.com/tandy1000/lastfm-nim"
 >>>>>>> 9cba2dc01195c1abfaf03610e820d4a72c4697fe

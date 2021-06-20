@@ -1,4 +1,10 @@
+# ignore binary files
+*
+!/**/
+!*.*
+#
 nimcache/
 nimblecache/
 htmldocs/
-listen2gether
+keys.json
+.vscode/

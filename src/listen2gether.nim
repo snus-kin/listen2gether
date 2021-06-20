@@ -1,20 +1,27 @@
-## Main process
-import os, json
-import types, scrobbling
+import os, json, jsony, options
 import listenbrainz
+#import models,
+import types, utils
 
-# temporarily set mirrored lb user to be 'snufkin' for debug, this will be set
+#[
+let
+  lfm_keys = readFile("keys.json").parseJson
+  lfm_key = lfm_keys["apiKey"].getStr
+  lfm_secret = lfm_keys["secret"].getStr
+]#
+
+# temporarily set mirrored lb user to be 'tandy1000' for debug, this will be set
 # by the user
-let mirroredUser = "snufkin"
-
 when isMainModule:
-  echo mirroredUser
-  let user = newUser("testuser", getEnv("lbToken"))
-  if user.lb.validateToken["code"].getInt != 200:
-    raise newException(ValueError, "ERROR: Invalid token (or perhaps you are rate limited)")
-  
-  let toMirror = user.lb.getUsersRecentListens(@[mirroredUser])["payload"]["listens"][0]
-  # then make this a Track object
-  # then put into scrobbling module to scrobble
-  #   this will make it into the lfm/lb payload format then it can be sent w/ the respective api
-  echo pretty toMirror
+  #let db = openDbConn()
+  #db.insertTables()
+  let
+    clientUser = newUser("test", lbToken=some(getEnv("lbToken")))
+    mirroredUser = newUser("tandy1000")
+    lb = newSyncListenBrainz(get(clientUser.lbToken))
+  lb.validateLbToken(get(clientUser.lbToken))
+  let
+    listen = lb.getCurrentTrack(mirroredUser)
+    submission = lb.listenTrack(listen)
+  #db.insertListen(listen)
+  #db.closeDbConn()
