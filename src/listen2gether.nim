@@ -22,6 +22,6 @@ when isMainModule:
   lb.validateLbToken(get(clientUser.lbToken))
   let
     listen = lb.getCurrentTrack(mirroredUser)
-    submission = lb.listenTrack(listen)
+    #submission = lb.listenTrack(listen)
   #db.insertListen(listen)
   #db.closeDbConn()
