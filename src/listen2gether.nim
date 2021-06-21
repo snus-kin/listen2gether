@@ -5,7 +5,7 @@ import listenbrainz
 import prologue
 import prologue/middlewares/utils
 import prologue/middlewares/staticfile
-import ./urls
+import ./routes/urls
 
 
 #[
