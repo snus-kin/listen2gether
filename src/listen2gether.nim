@@ -1,4 +1,4 @@
-import os, json, jsony, options
+import os, options
 import listenbrainz
 #import models,
 import types, utils
@@ -22,6 +22,6 @@ when isMainModule:
   lb.validateLbToken(get(clientUser.lbToken))
   let
     listen = lb.getCurrentTrack(mirroredUser)
-    submission = lb.listenTrack(listen)
+    #submission = lb.listenTrack(listen, listenType="single")
   #db.insertListen(listen)
   #db.closeDbConn()

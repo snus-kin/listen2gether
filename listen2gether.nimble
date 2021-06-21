@@ -11,16 +11,8 @@ bin           = @["listen2gether"]
 
 # Dependencies
 
-<<<<<<< HEAD
-requires "nim >= 1.2.2"
-requires "listenbrainz-nim"
-requires "lastfm"
-requires "prologue"
-=======
 requires "nim >= 1.4.0"
 requires "listenbrainz"
+requires "lastfm"
 requires "norm"
 requires "prologue"
-
-#requires "https://gitlab.com/tandy1000/lastfm-nim"
->>>>>>> 9cba2dc01195c1abfaf03610e820d4a72c4697fe
