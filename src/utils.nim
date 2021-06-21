@@ -23,7 +23,7 @@ template dumpKey(s: var string, v: string) =
 
 
 proc dumpHook*[T](s: var string, v: Option[T]) =
-  if not v.isNone:
+  if v.isSome:
     s.dumpHook(v.get())
 
 

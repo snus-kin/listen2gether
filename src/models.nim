@@ -3,25 +3,25 @@ import frosty
 import types
 
 
-let DBLOCATION = "listens.db"
+let DBLOCATION = "listen2gether.db"
 
 
 type
-  TrackTable = ref object of Model
-    track: string
+  TrackMetadataTable = ref object of Model
+    trackMetadata: string
 
   ListenTable = ref object of Model
     listen: string
-    track: TrackTable
+    trackMetadata: TrackMetadataTable
 
 
-func newTrackTable(track = ""): TrackTable =
-  TrackTable(track: track)
+func newTrackMetadataTable(track = ""): TrackMetadataTable =
+  TrackMetadataTable(trackMetadata: track)
 
 
 func newListenTable(listen = "",
-  track = newTrackTable()): ListenTable =
-  ListenTable(listen: listen, track: track)
+  track = newTrackMetadataTable()): ListenTable =
+  ListenTable(listen: listen, trackMetadata: track)
 
 
 proc openDbConn*(dbLocation = DBLOCATION): DbConn =
@@ -39,8 +39,8 @@ proc insertTables*(db: DbConn) =
 proc insertListen*(db: DbConn,
   listen: Listen) =
   var 
-    track = newTrackTable(freeze(listen.track))
-    listen = newListenTable(freeze(listen), track)
+    trackMetadata = newTrackMetadataTable(freeze(listen.trackMetadata))
+    listen = newListenTable(freeze(listen), trackMetadata)
   db.insert(listen)
 
 

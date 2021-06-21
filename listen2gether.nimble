@@ -13,6 +13,6 @@ bin           = @["listen2gether"]
 
 requires "nim >= 1.4.0"
 requires "listenbrainz"
-requires "lastfm"
+#requires "lastfm"
 requires "norm"
 requires "prologue"
