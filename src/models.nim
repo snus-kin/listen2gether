@@ -7,19 +7,27 @@ let DBLOCATION = "listen2gether.db"
 
 
 type
-  TrackMetadataTable = ref object of Model
-    trackMetadata: string
+  UserTable = ref object of Model
+    user: string
 
   ListenTable = ref object of Model
     listen: string
     trackMetadata: TrackMetadataTable
+
+  TrackMetadataTable = ref object of Model
+    trackMetadata: string
+
+
+func newUserTable(user = ""): UserTable =
+  UserTable(user: user)
 
 
 func newTrackMetadataTable(track = ""): TrackMetadataTable =
   TrackMetadataTable(trackMetadata: track)
 
 
-func newListenTable(listen = "",
+func newListenTable(
+  listen = "",
   track = newTrackMetadataTable()): ListenTable =
   ListenTable(listen: listen, trackMetadata: track)
 
@@ -36,7 +44,15 @@ proc insertTables*(db: DbConn) =
   db.createTables(newListenTable())
 
 
-proc insertListen*(db: DbConn,
+proc insertUser*(
+  db: DbConn,
+  user: User) =
+  var user = newUserTable(freeze(user))
+  db.insert(user)
+
+
+proc insertListen*(
+  db: DbConn,
   listen: Listen) =
   var 
     trackMetadata = newTrackMetadataTable(freeze(listen.trackMetadata))
