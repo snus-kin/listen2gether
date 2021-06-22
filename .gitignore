@@ -8,3 +8,4 @@ nimblecache/
 htmldocs/
 keys.json
 .vscode/
+*.db
