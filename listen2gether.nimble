@@ -8,11 +8,10 @@ srcDir        = "src"
 bin           = @["listen2gether"]
 
 
-
 # Dependencies
 
 requires "nim >= 1.4.0"
 requires "listenbrainz"
-#requires "lastfm"
+requires "https://gitlab.com/tandy1000/lastfm-nim"
 requires "norm"
 requires "prologue"
