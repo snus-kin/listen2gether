@@ -1,20 +1,18 @@
 import os, options
 import listenbrainz
-#import models,
-import types, utils
+import models, types, utils
 
 #[
 let
-  lfm_keys = readFile("keys.json").parseJson
-  lfm_key = lfm_keys["apiKey"].getStr
-  lfm_secret = lfm_keys["secret"].getStr
+  apiKey = os.getEnv("apiKey")
+  apiSecret = os.getEnv("apiSecret")
 ]#
 
 # temporarily set mirrored lb user to be 'tandy1000' for debug, this will be set
 # by the user
 when isMainModule:
-  #let db = openDbConn()
-  #db.insertTables()
+  let db = openDbConn()
+  db.insertTables()
   let
     clientUser = newUser("test", lbToken=some(getEnv("lbToken")))
     mirroredUser = newUser("tandy1000")
@@ -23,5 +21,4 @@ when isMainModule:
   let
     listen = lb.getCurrentTrack(mirroredUser)
     #submission = lb.listenTrack(listen, listenType="single")
-  #db.insertListen(listen)
-  #db.closeDbConn()
+  db.insertListen(listen.listens[0])
