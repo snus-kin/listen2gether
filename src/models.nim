@@ -36,12 +36,10 @@ proc openDbConn*(dbLocation = DBLOCATION): DbConn =
   result = open(dbLocation, "", "", "")
 
 
-proc closeDbConn*(db: DbConn) =
-  db.closeDbConn()
-
-
 proc insertTables*(db: DbConn) =
+  db.createTables(newUserTable())
   db.createTables(newListenTable())
+  db.createTables(newTrackMetadataTable())
 
 
 proc insertUser*(
@@ -57,6 +55,7 @@ proc insertListen*(
   var 
     trackMetadata = newTrackMetadataTable(freeze(listen.trackMetadata))
     listen = newListenTable(freeze(listen), trackMetadata)
+  db.insert(trackMetadata)
   db.insert(listen)
 
 
