@@ -1,5 +1,6 @@
 import asyncdispatch, json, options, jsony, strutils
-import listenbrainz
+import listenbrainz, lastfm
+import lastfm/[track]
 #import listenbrainz/[core]
 import types
 
@@ -57,6 +58,32 @@ proc dumpHook*(s: var string, v: object) =
         inc i
   s.add '}'
 
+
+## Last.FM
+
+proc scrobbleToTrack*(scrobble: Scrobble): Track = 
+  result = newTrack(trackName = scrobble.track,
+                    artistName = scrobble.artist,
+                    releaseName = scrobble.album,
+                    artistMbids = @[scrobble.mbid],
+                    trackNumber = scrobble.trackNumber,
+                    duration = scrobble.duration)
+
+
+proc scrobbleTrack*(
+  fm: SyncLastFM | AsyncLastFM,
+  track: Scrobble): Future[JsonNode] {.multisync.} = 
+  ## Scrobble a track to Last.FM
+  let result = fm.scrobble(track = track.track,
+                            artist = track.artist,
+                            album = track.album,
+                            mbid = track.mbid,
+                            albumArtist = track.albumArtist,
+                            trackNumber = track.trackNumber,
+                            duration = track.duration)
+
+
+## ListenBrainz
 
 proc listenPayloadToSubmissionPayload*(
   listenPayload: ListenPayload,

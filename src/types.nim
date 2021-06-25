@@ -6,17 +6,22 @@ type
   User* = ref object
     username*: string
     lfmSessionKey*, lbToken*: Option[string]
+    playingNow*, lastPlayed*: Option[Track]
 
-  # last.fm
+  Track* = ref object
+    trackName*, artistName*: string
+    releaseName*, recordingMbid*, releaseMbid*: Option[string]
+    artistMbids*: seq[Option[string]]
+    trackNumber*, duration*: Option[int]
+
+  ## Last.FM
 
   Scrobble* = ref object
     track*, artist*: string
-    timestamp*: int64
-    album*, context*, streamId*, mbid*, albumArtist*: Option[string]
-    chosenByUser*: Option[bool]
+    album*, mbid*, albumArtist*: Option[string]
     trackNumber*, duration*: Option[int]
 
-  # listenbrainz
+  ## ListenBrainz
 
   SubmissionPayload* = ref object
     listenType*: string
@@ -47,12 +52,47 @@ type
 
 func newUser*(
   username: string,
-  lfmSessionKey, lbToken: Option[string] = none(string)): User =
+  lfmSessionKey, lbToken: Option[string] = none(string),
+  playingNow, lastPlayed: Option[Track] = none(Track)): User =
   ## Create new User object
   new(result)
   result.username = username
   result.lfmSessionKey = lfmSessionKey
   result.lbToken = lbToken
+  result.playingNow = playingNow
+  result.lastPlayed = lastPlayed
+
+
+func newTrack*(
+  trackName, artistName: string,
+  releaseName, recordingMbid, releaseMbid: Option[string] = none(string),
+  artistMbids: seq[Option[string]] = @[none(string)],
+  trackNumber, duration: Option[int] = none(int)): Track =
+  ## Create new Track object
+  new(result)
+  result.trackName = trackName
+  result.artistName = artistName
+  result.releaseName = releaseName
+  result.recordingMbid = recordingMbid
+  result.releaseMbid = releaseMbid
+  result.artistMbids = artistMbids
+  result.trackNumber = trackNumber
+  result.duration = duration
+
+
+func newScrobble*(
+  track, artist: string,
+  album, mbid, albumArtist: Option[string] = none(string),
+  trackNumber, duration: Option[int] = none(int)): Scrobble =
+  ## Create new Scrobble object
+  new(result)
+  result.track = track
+  result.artist = artist
+  result.album = album
+  result.mbid = mbid
+  result.albumArtist = albumArtist
+  result.trackNumber = trackNumber
+  result.duration = duration
 
 
 func newSubmissionPayload*(
@@ -99,10 +139,8 @@ func newTrackMetadata*(
   new(result)
   result.trackName = trackName
   result.artistName = artistName
-  if not releaseName.isNone:
-    result.releaseName = releaseName
-  if not additionalInfo.isNone:
-    result.additionalInfo = additionalInfo
+  result.releaseName = releaseName
+  result.additionalInfo = additionalInfo
 
 
 func newAdditionalInfo*(
