@@ -7,6 +7,17 @@ type
     username*: string
     lfmSessionKey*, lbToken*: Option[string]
 
+  # last.fm
+
+  Scrobble* = ref object
+    track*, artist*: string
+    timestamp*: int64
+    album*, context*, streamId*, mbid*, albumArtist*: Option[string]
+    chosenByUser*: Option[bool]
+    trackNumber*, duration*: Option[int]
+
+  # listenbrainz
+
   SubmissionPayload* = ref object
     listenType*: string
     payload*: seq[Listen]
